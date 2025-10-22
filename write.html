@@ -1,1 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MUJUKI-FireWorks</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* write.css */
+.write-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 
+.write-section h2 {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: 'Noto Sans KR', sans-serif;
+    box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1em;
+}
+
+#submit-btn {
+    background-color: #FF5733;
+    color: white;
+}
+
+#cancel-btn {
+    background-color: #ddd;
+    color: #333;
+}
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <a href="#">MUJUKI-FireWorks<a>
+    </div>
+      <ul class="navbar-menu">
+          <li class="dropdown">
+            <a href="#">상품</a>
+            <ul class="dropdown-content"> <li><a href="#">축제</a></li>
+                <li><a href="#">폭죽</a></li>
+                <li><a href="#">파티용품</a></li>
+            </ul>
+          </li>
+        <li><a href="portfolio.html">포트폴리오</a></li>
+          <li><a href="contact.html">문의하기</a></li>
+          <li><a href="#">후기</a></li>
+      </ul>
+  </nav>
+</header>
+
+<main class="main-container">
+  <aside class="sidebar-left">
+    <div class="contact-info">
+      <h2>문의 안내</h2>
+      <div class="info-item">
+        <h3>📞 문의 전화</h3>
+        <p>010-2360-3243</p>
+      </div>
+      <div class="info-item">
+        <h3>📧 이메일</h3>
+        <p>contact@fireworks.com</p>
+      </div>
+      <div class="info-item">
+        <h3>📱 SNS 문의</h3>
+        <p>카카오톡: @mujuki</p>
+      </div>
+    </div>
+  </aside>
+ <section class="content-right">
+  <div class="board-section"> <div class="board-header"> <h2>문의 게시판</h2>
+          <div class="board-actions">
+              <div class="search-box">
+                  <select id="search-option">
+                      <option value="all">전체</option>
+                      <option value="title">제목</option>
+                      <option value="author">작성자</option>
+                  </select>
+                  <input type="text" id="search-input" placeholder="검색어를 입력하세요.">
+                  <button id="search-btn">검색</button>
+              </div>
+              <button id="write-btn" class="action-btn">글쓰기</button> </div>
+      </div>
+      <table class="board-table"> <thead>
+              <tr>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
+                  <th>답변상태</th> </tr>
+          </thead>
+          <tbody id="board-tbody">
+              </tbody>
+      </table>
+      <div class="pagination">
+          </div>
+  </div>
+  </section>
+</main>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-logo">
+            MUJUKI-FireWorks
+        </div>
+        <div class="footer-info">
+            <p><strong>사업자명:</strong> MUJUKI</p>
+            <p><strong>사업자번호:</strong> 123-45-67890</p>
+            <p><strong>주소:</strong> 경기도 오산시 원동로</p>
+            <p><strong>이메일:</strong> contact@fireworks.com</p>
+        </div>
+    </div>
+</footer>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('write-form');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // 폼의 기본 제출 동작을 막음
+
+        // 폼 데이터 가져오기
+        const name = document.getElementById('write-name').value;
+        const phone = document.getElementById('write-phone').value;
+        const category = document.getElementById('write-category').value;
+        const title = document.getElementById('write-title').value;
+        const content = document.getElementById('write-content').value;
+
+        // 간단한 유효성 검사
+        if (!name || !phone || !category || !title || !content) {
+            alert('모든 필수 항목을 입력해주세요.');
+            return;
+        }
+
+        const inquiryData = {
+            name,
+            phone,
+            category,
+            title,
+            content,
+            createdAt: new Date().toISOString() // 저장 시간
+        };
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '제출 중...';
+
+        try {
+            // ❗❗ 3단계에서 만들 백엔드(Cloud Function) URL을 여기에 넣습니다. ❗❗
+            const response = await fetch('YOUR_CLOUD_FUNCTION_URL_HERE', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inquiryData),
+            });
+
+            if (response.ok) {
+                alert('문의가 성공적으로 제출되었습니다.');
+                window.location.href = 'contact.html'; // 제출 후 문의 목록 페이지로 이동
+            } else {
+                throw new Error('서버 응답에 문제가 있습니다.');
+            }
+        } catch (error) {
+            console.error('제출 중 오류 발생:', error);
+            alert('제출에 실패했습니다. 나중에 다시 시도해주세요.');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '제출하기';
+        }
+    });
+
+    // 취소 버튼
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+        if (confirm('작성을 취소하시겠습니까?')) {
+            window.history.back(); // 뒤로 가기
+        }
+    });
+});
+</script>
+<script src="index.js"></script>
+</body>
+</html>
