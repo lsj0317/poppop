@@ -176,8 +176,8 @@
       })
       .then(response => response.json()) // 응답을 JSON으로 파싱
       .then(data => {
-          console.log('Success:', data);
-          if (data.result === 'success') {
+          console.log('SUCCESS:', data);
+          if (data.result === 'SUCCESS') {
               responseMsg.textContent = '문의가 성공적으로 전송되었습니다!';
               responseMsg.className = 'success';
               form.reset(); // 폼 필드 초기화
