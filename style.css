@@ -502,4 +502,168 @@ header.navbar-scrolled .navbar .navbar-menu li a:hover {
 .pagination button:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+
+}
+
+/* -------------------- */
+/* 반응형 네비게이션 스타일 */
+/* (모바일 768px 이하) */
+/* -------------------- */
+
+@media (max-width: 768px) {
+    /* 1. 햄버거 버튼 보이기 */
+    #mobile-menu-toggle {
+        display: block; /* 모바일에선 버튼 보이기 */
+        background: none;
+        border: none;
+        font-size: 2em;
+        cursor: pointer;
+        order: 3; /* 로고 | 메뉴 | 버튼 -> 로고 | 버튼 순서로 */
+    }
+
+    .navbar {
+        flex-wrap: wrap; /* 로고와 버튼이 한 줄에 */
+        padding: 10px 20px;
+    }
+
+    .navbar-logo {
+        order: 1;
+    }
+
+    /* 2. 네비게이션 메뉴 숨기기 (모바일 기본 상태) */
+    .navbar-menu {
+        display: none; /* 일단 숨김 */
+        flex-direction: column; /* 세로 정렬 */
+        width: 100%;
+        order: 3; /* 로고, 햄버거 버튼 아래로 */
+        margin-top: 10px;
+        background-color: #fdfdfd;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        border-radius: 8px;
+    }
+
+    /* 3. 햄버거 버튼 클릭 시 메뉴 보이기 (JS가 .is-open 클래스 추가) */
+    .navbar-menu.is-open {
+        display: flex;
+    }
+
+    .navbar-menu li {
+        width: 100%;
+        text-align: left;
+    }
+
+    .navbar-menu li a {
+        padding: 15px 20px;
+        display: block;
+        width: 100%;
+        box-sizing: border-box; /* 패딩이 너비를 넘지 않게 */
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .navbar-menu li a:hover {
+        background-color: #f5f5f5;
+        color: #FF5733;
+    }
+
+    /* 4. 드롭다운 메뉴 (모바일) */
+    .dropdown-content {
+        position: static; /* absolute 해제 */
+        display: none; /* 기본 숨김 */
+        box-shadow: none;
+        background-color: #fafafa;
+        margin-top: 0;
+        border-radius: 0;
+        min-width: 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* JS가 .is-open-mobile 클래스 추가 시 보임 */
+    .dropdown-content.is-open-mobile {
+        display: block;
+    }
+    
+    .dropdown-content li a {
+        padding-left: 30px; /* 들여쓰기 */
+        color: #555;
+    }
+
+    /* 5. 메인 레이아웃 (모바일) */
+    .main-container {
+        flex-direction: column; /* 세로 정렬 */
+        padding: 10px;
+    }
+    
+    .sidebar-left, .content-right {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+        /* 모바일에선 사이드바 고정 해제 */
+        position: static; 
+    }
+    
+    /* 6. 푸터 (모바일) */
+    .footer-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .footer-logo { text-align: center; }
+    .footer-info { text-align: center; }
+}
+
+/* -------------------- */
+/* 데스크탑 (769px 이상) */
+/* -------------------- */
+@media (min-width: 769px) {
+    /* 햄버거 버튼 숨기기 */
+    #mobile-menu-toggle {
+        display: none;
+    }
+
+    /* 네비 메뉴 다시 가로 정렬 (원래대로) */
+    .navbar-menu {
+        display: flex;
+        flex-direction: row;
+        position: static;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        box-shadow: none;
+    }
+
+    /* 모바일에서 덮어썼던 스타일 원복 */
+    .navbar-menu li a {
+        border-bottom: none;
+        display: inline-block;
+        width: auto;
+    }
+
+    .navbar-menu li a:hover {
+        background-color: #FF5733;
+        color: #fff;
+    }
+
+    /* 드롭다운 메뉴 (원래대로) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        margin-top: 5px;
+        border-radius: 5px;
+    }
+
+    .dropdown-content li a {
+        padding: 12px 16px;
+        color: black;
+    }
+    
+    .dropdown-content li a:hover {
+        background-color: #FF5733;
+        color: #fff;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
 }
