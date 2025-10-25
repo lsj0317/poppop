@@ -85,7 +85,7 @@
         <header>
             <nav class="navbar">
                 <div class="navbar-logo">
-                    <a href="index.html">🎇 FireWorks</a> </div>
+                    <a href="../index.html">🎇 FireWorks</a> </div>
                 <ul class="navbar-menu">
                     <li class="dropdown">
                         <a href="#">상품</a>
@@ -143,17 +143,19 @@
             </section>
             </main>
 
-        <footer class="site-footer">
-             <div class="footer-content">
-                <div class="footer-logo">FireWorks</div>
-                <div class="footer-info">
-                    <p><strong>사업자명:</strong> (주)파이어웍스</p>
-                    <p><strong>사업자번호:</strong> 123-45-67890</p>
-                    <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 123, 45층</p>
-                    <p><strong>이메일:</strong> contact@fireworks.com</p>
+            <footer class="site-footer">
+                <div class="footer-content">
+                    <div class="footer-logo">
+                        MUJUKI-FireWorks
+                    </div>
+                    <div class="footer-info">
+                        <p><strong>사업자명:</strong> MUJUKI</p>
+                        <p><strong>사업자번호:</strong> 123-45-67890</p>
+                        <p><strong>주소:</strong> 경기도 오산시 원동로</p>
+                        <p><strong>이메일:</strong> contact@fireworks.com</p>
+                    </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
     </div>
 
     <script>
@@ -161,10 +163,10 @@
     // 30개의 더미 데이터 생성
     const dummyData = Array.from({ length: 30 }, (_, i) => {
         const id = i + 1;
-        const authors = ['김민준', '이서연', '박도윤', '최지우', '정하은'];
+        const authors = ['김*준', '이*연', '박*윤', '최*우', '정*은'];
         return {
             id: id,
-            title: `정말 멋진 경험이었어요! (${id})`,
+            title: `폭죽 이벤트 후기... (${id})`,
             author: authors[i % authors.length],
             date: `2025-10-${String(15 - (i % 15)).padStart(2, '0')}`,
             recommendations: Math.floor(Math.random() * 100)
