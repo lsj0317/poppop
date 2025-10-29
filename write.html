@@ -158,17 +158,44 @@
   const form = document.getElementById('contact-form');
   const responseMsg = document.getElementById('response-message');
   const submitButton = document.getElementById('submit-button');
+  const phoneInput = document.getElementById('phone'); // ❗ 1. 전화번호 input 선택
   
+  // ❗ 2. 전화번호 자동 하이픈 및 숫자만 입력 기능
+  phoneInput.addEventListener('input', (e) => {
+      const value = e.target.value;
+      
+      // 숫자만 추출
+      const digits = value.replace(/[^0-9]/g, '');
+      
+      let formatted = '';
+      if (digits.length > 0) {
+          // 010
+          formatted = digits.substring(0, 3);
+      }
+      if (digits.length > 3) {
+          // 010-1234
+          formatted += '-' + digits.substring(3, 7);
+      }
+      if (digits.length > 7) {
+          // 010-1234-5678 (총 11자리 숫자가 13자리 문자열이 됨)
+          formatted += '-' + digits.substring(7, 11);
+      }
+      
+      // 포맷된 값을 input에 다시 설정
+      e.target.value = formatted;
+  });
+
+  // 3. 폼 제출 로직
   form.addEventListener('submit', e => {
       // 1. 폼의 기본 제출(새로고침) 동작을 막습니다.
       e.preventDefault();
-     
+      
       // 2. 제출 버튼을 비활성화하고 메시지를 표시합니다.
       submitButton.disabled = true;
       submitButton.textContent = '전송 중...';
       responseMsg.textContent = ''; // 이전 메시지 초기화
       responseMsg.className = '';
-  
+
       // 3. fetch API를 사용하여 폼 데이터를 비동기적으로 전송합니다.
       fetch(scriptURL, {
           method: 'POST',
