@@ -12,6 +12,31 @@
 /* 고객 후기 페이지 스타일 */
 /* -------------------- */
 
+/* 후기 카드 스타일 (예시) */
+    .review-card {
+      background-color: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .review-card h4 {
+      margin: 0 0 10px 0;
+      color: #333;
+    }
+    .review-card small {
+      font-size: 0.9em;
+      color: #777;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .review-card p {
+      margin: 0;
+      color: #555;
+      line-height: 1.6;
+    }
+        
 .search-box {
     display: flex;
     gap: 10px;
@@ -85,7 +110,7 @@
 <header>
   <nav class="navbar">
     <div class="navbar-logo">
-      <a href="#">MUJUKI-FireWorks<a>
+      <a href="../index.html">MUJUKI-FireWorks<a>
     </div>
       <ul class="navbar-menu">
           <li class="dropdown">
@@ -114,35 +139,20 @@
                 </div>
             </aside>
 
-            <section class="content-right">
-                <div class="reviews-section">
-                    <div class="reviews-header">
-                        <h2>고객 후기</h2>
-                        <div class="search-box">
-                            <select id="search-option">
-                                <option value="all">전체</option>
-                                <option value="title">제목</option>
-                                <option value="author">작성자</option>
-                            </select>
-                            <input type="text" id="search-input" placeholder="검색어를 입력하세요.">
-                            <button id="search-btn">검색</button>
-                        </div>
-                    </div>
-                    <table class="reviews-table">
-                        <thead>
-                            <tr>
-                                <th>제목</th>
-                                <th>작성자</th> <th>작성일</th>
-                                <th>추천수</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reviews-tbody">
-                            </tbody>
-                    </table>
-                    <div class="pagination">
-                        </div>
+             <section class="content-right">
+                <div class="board-section">
+                  <div class="board-header">
+                    <h2>고객 후기</h2>
+                  </div>
+            
+                  <!-- 후기 목록이 여기에 동적으로 삽입됩니다. -->
+                  <div id="review-list">
+                    <p style="text-align: center; padding: 20px;">후기 목록을 불러오는 중입니다...</p>
+                  </div>
+            
+                  <!-- (검색, 페이징 등 다른 UI가 있다면 여기에 위치) -->
                 </div>
-            </section>
+              </section>
             </main>
 
             <footer class="site-footer">
@@ -162,142 +172,49 @@
 
     <script src="js/common.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-    // 30개의 더미 데이터 생성
-    const dummyData = Array.from({ length: 30 }, (_, i) => {
-        const id = i + 1;
-        const authors = ['김*준', '이*연', '박*윤', '최*우', '정*은'];
-        return {
-            id: id,
-            title: `폭죽 이벤트 후기... (${id})`,
-            author: authors[i % authors.length],
-            date: `2025-10-${String(15 - (i % 15)).padStart(2, '0')}`,
-            recommendations: Math.floor(Math.random() * 100)
-        };
-    });
 
-    let currentPage = 1;
-    const itemsPerPage = 10;
-    let filteredData = [...dummyData];
-
-    const tbody = document.getElementById('reviews-tbody');
-    const paginationContainer = document.querySelector('.pagination');
-    const searchBtn = document.getElementById('search-btn');
-    const searchInput = document.getElementById('search-input');
-    const searchOption = document.getElementById('search-option');
-
-    // 테이블 렌더링 함수
-    function renderTable() {
-        tbody.innerHTML = '';
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const pageItems = filteredData.slice(startIndex, endIndex);
-
-        if (pageItems.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4">검색 결과가 없습니다.</td></tr>';
-            return;
-        }
-
-        pageItems.forEach(item => {
-            const row = `
-                <tr>
-                    <td>${item.title}</td>
-                    <td>${item.author}</td>
-                    <td>${item.date}</td>
-                    <td>${item.recommendations}</td>
-                </tr>
-            `;
-            tbody.innerHTML += row;
-        });
-    }
-
-    // 페이징 렌더링 함수
-    function renderPagination() {
-        paginationContainer.innerHTML = '';
-        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-       
-        // 이전 버튼
-        const prevBtn = document.createElement('button');
-        prevBtn.textContent = '«';
-        prevBtn.disabled = currentPage === 1;
-        prevBtn.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-                renderPagination();
-            }
-        });
-        paginationContainer.appendChild(prevBtn);
-
-        // 페이지 번호 버튼
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.textContent = i;
-            if (i === currentPage) {
-                pageBtn.classList.add('active');
-            }
-            pageBtn.addEventListener('click', () => {
-                currentPage = i;
-                renderTable();
-                renderPagination();
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx473lGWbmsYBv0b5CdIzX5wShCmnY6R78-JufmoiJnSLjacJSYO7z1TpKGDT-JhCxi/exec";
+        
+        // 페이지가 로드되면 데이터를 불러옵니다.
+        window.addEventListener('DOMContentLoaded', () => {
+          const listContainer = document.getElementById('review-list');
+          
+          fetch(WEB_APP_URL)
+            .then(response => response.json())
+            .then(data => {
+              listContainer.innerHTML = ''; // 로딩 메시지 제거
+    
+              if (data.length === 0) {
+                listContainer.innerHTML = '<p>등록된 후기가 없습니다.</p>';
+                return;
+              }
+    
+              // 데이터를 최신순으로 정렬 (날짜 기준 내림차순)
+              data.sort((a, b) => new Date(b.request_date) - new Date(a.request_date));
+    
+              // 각 데이터를 HTML 카드로 만들어 삽입
+              data.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                
+                // 전화번호 뒷자리 마스킹
+                const maskedPhone = review.phone.slice(0, -4) + '****';
+                // 날짜 포맷팅
+                const formattedDate = new Date(review.request_date).toLocaleDateString('ko-KR');
+    
+                reviewCard.innerHTML = `
+                  <h4>${review.name}님 (연락처: ${maskedPhone})</h4>
+                  <small>의뢰일: ${formattedDate}</small>
+                  <p>${review.review_content}</p>
+                `;
+                listContainer.appendChild(reviewCard);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              listContainer.innerHTML = '<p style="color: red;">후기를 불러오는 데 실패했습니다.</p>';
             });
-            paginationContainer.appendChild(pageBtn);
-        }
-
-        // 다음 버튼
-        const nextBtn = document.createElement('button');
-        nextBtn.textContent = '»';
-        nextBtn.disabled = currentPage === totalPages;
-        nextBtn.addEventListener('click', () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-                renderPagination();
-            }
         });
-        paginationContainer.appendChild(nextBtn);
-    }
-   
-    // 검색 기능 함수
-    function handleSearch() {
-        const searchTerm = searchInput.value.trim();
-        const option = searchOption.value;
-
-        if (!searchTerm) {
-            alert('내용을 입력해주세요.');
-            return;
-        }
-
-        filteredData = dummyData.filter(item => {
-            if (option === 'all') {
-                return item.title.includes(searchTerm) || item.author.includes(searchTerm);
-            } else if (option === 'title') {
-                return item.title.includes(searchTerm);
-            } else if (option === 'author') {
-                return item.author.includes(searchTerm);
-            }
-            return false;
-        });
-       
-        currentPage = 1; // 검색 후 첫 페이지로 리셋
-        renderTable();
-        renderPagination();
-    }
-
-    // 검색 버튼 클릭 이벤트
-    searchBtn.addEventListener('click', handleSearch);
-   
-    // 엔터 키로 검색
-    searchInput.addEventListener('keyup', (event) => {
-        if (event.key === 'Enter') {
-            handleSearch();
-        }
-    });
-
-    // 초기 렌더링
-    renderTable();
-    renderPagination();
-});
     </script>
 </body>
 </html>
